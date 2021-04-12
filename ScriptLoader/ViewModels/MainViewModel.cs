@@ -3,6 +3,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using Prism.Commands;
 using Prism.Mvvm;
 using ScriptLoader.Helpers;
+using ScriptLoader.Repositories;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -14,11 +15,13 @@ namespace ScriptLoader.ViewModels
 {
     public class MainViewModel : BindableBase
     {
+        #region property
+
         /// <summary>
         /// 스크립트 경로
         /// </summary>
-        public string ScriptDirectory 
-        { 
+        public string ScriptDirectory
+        {
             get => scriptDirectory;
             set => SetProperty(ref scriptDirectory, value);
         }
@@ -62,10 +65,17 @@ namespace ScriptLoader.ViewModels
             set => SetProperty(ref running, value);
         }
 
+        /// <summary>
+        /// 내부 설정
+        /// </summary>
+        private SettingRepository settingRepository;
+
         private string scriptDirectory;
         private ObservableCollection<string> scripts;
         private string activatedScript;
         private bool running;
+
+        #endregion
 
         /// <summary>
         /// 
@@ -76,9 +86,10 @@ namespace ScriptLoader.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-#warning load..
-                    //load
-                    this.ScriptDirectory = @"C:\Users\psg10\source\repos\ScriptLoader\ScriptLoader\bin\Debug\Scripts";
+                    this.settingRepository = new SettingRepository();
+                    var setting = settingRepository.GetSetting();
+
+                    this.ScriptDirectory = setting.ScriptDirectory;
 
                     if (!string.IsNullOrEmpty(this.ScriptDirectory))
                     {
@@ -106,7 +117,14 @@ namespace ScriptLoader.ViewModels
                     dialog.IsFolderPicker = true;
                     if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                     {
+
                         this.ScriptDirectory = Path.Combine(dialog.FileName);
+
+                        var setting = this.settingRepository.GetSetting();
+                        setting.ScriptDirectory = this.ScriptDirectory;
+                        this.settingRepository.UpdateSetting(setting);
+                        var save = this.settingRepository.Save();
+
                         ScanCommand.Execute();
 
                         var notifier = new ToastBuilder

@@ -365,3 +365,5 @@ FodyWeavers.xsd
 #
 Scripts/
 Img/
+Migrations/
+Data.sqlite
