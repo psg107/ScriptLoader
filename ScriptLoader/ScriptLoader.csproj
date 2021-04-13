@@ -222,6 +222,7 @@
     </Compile>
     <Compile Include="Context\ScriptLoaderDataContext.cs" />
     <Compile Include="Context\ScriptLoaderDataContextSeed.cs" />
+    <Compile Include="CustomControls\NoRightButtonListBox.cs" />
     <Compile Include="Entities\Setting.cs" />
     <Compile Include="Helpers\MessageBoxHelper.cs" />
     <Compile Include="Helpers\ToastBuilder.cs" />

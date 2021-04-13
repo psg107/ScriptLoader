@@ -3,11 +3,17 @@ using System.Windows;
 
 namespace ScriptLoader.Helpers
 {
-    public static class MessageBoxHelper
+    public class MessageBoxHelper
     {
         private const string CAPTION = "알림";
+        private readonly BindableBase dataContext;
 
-        public static void ShowMessage(string message, BindableBase dataContext)
+        public MessageBoxHelper(BindableBase dataContext)
+        {
+            this.dataContext = dataContext;
+        }
+
+        public void ShowMessage(string message)
         {
             Window owner = null;
 
@@ -26,7 +32,7 @@ namespace ScriptLoader.Helpers
             MessageBox.Show(owner, message, CAPTION);
         }
 
-        public static bool ShowQuestionMessage(string message, BindableBase dataContext)
+        public bool ShowQuestionMessage(string message)
         {
             Window owner = null;
 

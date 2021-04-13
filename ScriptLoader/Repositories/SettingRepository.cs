@@ -18,13 +18,9 @@ namespace ScriptLoader.Repositories
             return context.Setting.FirstOrDefault();
         }
 
-        public void UpdateSetting(Setting setting)
+        public int UpdateSetting(Setting setting)
         {
             context.Setting.Update(setting);
-        }
-
-        public int Save()
-        {
             return context.SaveChanges();
         }
     }

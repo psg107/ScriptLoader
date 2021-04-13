@@ -6,6 +6,7 @@ using ScriptLoader.Helpers;
 using ScriptLoader.Repositories;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -65,17 +66,34 @@ namespace ScriptLoader.ViewModels
             set => SetProperty(ref running, value);
         }
 
-        /// <summary>
-        /// 내부 설정
-        /// </summary>
-        private SettingRepository settingRepository;
-
         private string scriptDirectory;
         private ObservableCollection<string> scripts;
         private string activatedScript;
         private bool running;
 
         #endregion
+
+        #region services
+
+        /// <summary>
+        /// 메시지박스
+        /// </summary>
+        private MessageBoxHelper messageBoxHelper;
+
+        /// <summary>
+        /// 내부 설정
+        /// </summary>
+        private SettingRepository settingRepository;
+
+        private void Initialize()
+        {
+            this.messageBoxHelper = new MessageBoxHelper(this);
+            this.settingRepository = new SettingRepository();
+        }
+
+        #endregion
+
+        #region command
 
         /// <summary>
         /// 
@@ -86,9 +104,9 @@ namespace ScriptLoader.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    this.settingRepository = new SettingRepository();
-                    var setting = settingRepository.GetSetting();
+                    Initialize();
 
+                    var setting = this.settingRepository.GetSetting();
                     this.ScriptDirectory = setting.ScriptDirectory;
 
                     if (!string.IsNullOrEmpty(this.ScriptDirectory))
@@ -117,13 +135,11 @@ namespace ScriptLoader.ViewModels
                     dialog.IsFolderPicker = true;
                     if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                     {
-
                         this.ScriptDirectory = Path.Combine(dialog.FileName);
 
                         var setting = this.settingRepository.GetSetting();
                         setting.ScriptDirectory = this.ScriptDirectory;
                         this.settingRepository.UpdateSetting(setting);
-                        var save = this.settingRepository.Save();
 
                         ScanCommand.Execute();
 
@@ -150,17 +166,17 @@ namespace ScriptLoader.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
+                    if (Running)
+                    {
+                        return;
+                    }
+
                     var notifier = new ToastBuilder
                     {
                         TopMost = false,
                         LifeTime = 5,
                         Width = 600
                     }.BuildNotifier();
-
-                    if (Running)
-                    {
-                        return;
-                    }
 
                     if (string.IsNullOrEmpty(this.ScriptDirectory))
                     {
@@ -208,7 +224,7 @@ namespace ScriptLoader.ViewModels
                         }
                         catch (Exception ex)
                         {
-                            MessageBoxHelper.ShowMessage(ex.Message, this);
+                            messageBoxHelper.ShowMessage(ex.Message);
                         }
                     });
 
@@ -217,7 +233,7 @@ namespace ScriptLoader.ViewModels
                         TopMost = false,
                         LifeTime = 1,
                         Width = 300
-                    }.BuildNotifier(); 
+                    }.BuildNotifier();
                     notifier.ShowInformation($"{this.ActivatedScriptFileName} 로드!");
 
                     this.Running = true;
@@ -238,16 +254,29 @@ namespace ScriptLoader.ViewModels
                     System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
                     Application.Current.Shutdown();
                     return;
-
-                    //var result = MessageBoxHelper.ShowQuestionMessage("재시작하시겠습니까?", this);
-                    //if (result)
-                    //{
-                    //    System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-                    //    Application.Current.Shutdown();
-                    //    return;
-                    //}
                 });
             }
         }
+
+        /// <summary>
+        /// 스크립트 수정
+        /// </summary>
+        public DelegateCommand<string> EditScriptCommand
+        {
+            get
+            {
+                return new DelegateCommand<string>((obj) =>
+                {
+                    var scriptFilePath = obj;
+
+                    if (File.Exists(scriptFilePath))
+                    {
+                        Process.Start("notepad.exe", scriptFilePath);
+                    }
+                });
+            }
+        }
+
+        #endregion
     }
 }
