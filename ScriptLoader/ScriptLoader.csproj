@@ -264,35 +264,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Scripts\buff.ahk" />
-    <None Include="Scripts\click.ahk" />
-    <None Include="Scripts\destroy.ahk" />
-    <None Include="Scripts\ego.ahk" />
-    <None Include="Scripts\freestyleJam.ahk" />
-    <None Include="Scripts\honey.ahk" />
-    <None Include="Scripts\script.ahk" />
-    <None Include="Scripts\wine.ahk" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="img\egoimg\cancel.PNG" />
-    <Resource Include="img\egoimg\feed.PNG" />
-    <Resource Include="img\egoimg\feed2.PNG" />
-    <Resource Include="img\egoimg\feed3.PNG" />
-    <Resource Include="img\egoimg\feed4.PNG" />
-    <Resource Include="img\egoimg\feed5.PNG" />
-    <Resource Include="img\egoimg\state.PNG" />
-    <Resource Include="img\fj\a.png" />
-    <Resource Include="img\fj\d.png" />
-    <Resource Include="img\fj\gauge.png" />
-    <Resource Include="img\fj\icon.PNG" />
-    <Resource Include="img\fj\s.png" />
-    <Resource Include="img\fj\w.png" />
-    <Resource Include="img\honey\꿀물.PNG" />
-    <Resource Include="img\honey\빈병.png" />
-    <Resource Include="img\wine\point.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icon.ico" />
