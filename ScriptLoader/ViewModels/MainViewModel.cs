@@ -201,6 +201,7 @@ namespace ScriptLoader.ViewModels
                     if (string.IsNullOrEmpty(this.ScriptDirectory))
                     {
                         notifier.ShowError("스크립트 경로가 설정되지 않았습니다.");
+                        SetScriptDirectoryCommand.Execute();
                         return;
                     }
 
@@ -208,6 +209,7 @@ namespace ScriptLoader.ViewModels
                     {
                         notifier.ShowError("스크립트 경로가 존재하지 않습니다.");
                         this.ScriptDirectory = string.Empty;
+                        SetScriptDirectoryCommand.Execute();
                         return;
                     }
 
