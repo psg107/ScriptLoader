@@ -2,6 +2,7 @@
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Prism.Commands;
 using Prism.Mvvm;
+using ScriptLoader.Entities;
 using ScriptLoader.Helpers;
 using ScriptLoader.Repositories;
 using ScriptLoader.Views;
@@ -101,16 +102,16 @@ namespace ScriptLoader.ViewModels
         /// </summary>
         private SettingRepository settingRepository;
 
+        #endregion
+
+        #region command
+
         private void InitializeServices()
         {
             this.messageBoxHelper = new MessageBoxHelper(this);
             this.navigationService = new NavigationService(this);
-            this.settingRepository = new SettingRepository();
+            this.settingRepository = SettingRepository.Instance;
         }
-
-        #endregion
-
-        #region command
 
         /// <summary>
         /// 
@@ -292,7 +293,27 @@ namespace ScriptLoader.ViewModels
 
                     if (File.Exists(scriptFilePath))
                     {
-                        Process.Start("notepad.exe", scriptFilePath);
+                        var setting = this.settingRepository.GetSetting();
+                        var cmd = string.Empty;
+                        switch (setting.Editor)
+                        {
+                            case Editor.Notepad:
+                                cmd = "notepad";
+                                break;
+
+                            case Editor.VSCode:
+                                cmd = "code";
+                                break;
+
+                            case Editor.Etc:
+                                cmd = setting.EditorCommand;
+                                break;
+
+                            default:
+                                cmd = "notepad.exe";
+                                break;
+                        }
+                        Process.Start(cmd, scriptFilePath);
                     }
                 });
             }

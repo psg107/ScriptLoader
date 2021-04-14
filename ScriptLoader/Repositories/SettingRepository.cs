@@ -6,9 +6,22 @@ namespace ScriptLoader.Repositories
 {
     public class SettingRepository
     {
+        public static SettingRepository Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new SettingRepository();
+                }
+                return instance;
+            }
+        }
+        private static SettingRepository instance;
+
         private readonly ScriptLoaderDataContext context;
 
-        public SettingRepository()
+        private SettingRepository()
         {
             this.context = new ScriptLoaderDataContext();
         }

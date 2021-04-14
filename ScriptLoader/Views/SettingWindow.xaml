@@ -5,6 +5,10 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:local="clr-namespace:ScriptLoader.Views"
+                 xmlns:vm="clr-namespace:ScriptLoader.ViewModels"
+                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                 xmlns:cmd="http://www.galasoft.ch/mvvmlight"
+                 xmlns:e="clr-namespace:ScriptLoader.Entities"
                  mc:Ignorable="d"
                  WindowStartupLocation="CenterOwner"
                  Title="Setting"
@@ -14,7 +18,17 @@
                  ResizeMode="NoResize"
                  Width="500"
                  Height="300">
-    
+
+    <Window.DataContext>
+        <vm:SettingWindowViewModel />
+    </Window.DataContext>
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <cmd:EventToCommand Command="{Binding LoadCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
     <StackPanel Margin="10">
         <TextBlock Text="* 모든 설정은 자동으로 저장됩니다." Foreground="Red" />
         
@@ -22,9 +36,9 @@
         <GroupBox Header="스크립트 편집기" Margin="0,5,0,0" Style="{x:Null}" Padding="5,10">
             <GroupBox.Content>
                 <StackPanel Orientation="Horizontal">
-                    <RadioButton Content="메모장" />
-                    <RadioButton Content="VSCode" Margin="20,0,0,0" />
-                    <RadioButton Margin="20,0,0,0" FocusVisualStyle="{x:Null}">
+                    <RadioButton Content="메모장" IsChecked="{Binding Editor, Converter={StaticResource EnumToRadioValueConverter}, ConverterParameter={x:Static e:Editor.Notepad}}" />
+                    <RadioButton Content="VSCode" IsChecked="{Binding Editor, Converter={StaticResource EnumToRadioValueConverter}, ConverterParameter={x:Static e:Editor.VSCode}}" Margin="20,0,0,0" />
+                    <RadioButton Margin="20,0,0,0" IsChecked="{Binding Editor, Converter={StaticResource EnumToRadioValueConverter}, ConverterParameter={x:Static e:Editor.Etc}}" FocusVisualStyle="{x:Null}">
                         <RadioButton.Content>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -33,7 +47,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Grid.Column="0" Text="직접입력" VerticalAlignment="Center" />
-                                <TextBox Grid.Column="1" Margin="5,0,0,0" Width="200" IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type RadioButton}}, Path=IsChecked}" />
+                                <TextBox Grid.Column="1" Margin="5,0,0,0" Width="200" Text="{Binding EditorCommand, UpdateSourceTrigger=LostFocus}" IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type RadioButton}}, Path=IsChecked}" />
                             </Grid>
                         </RadioButton.Content>
                     </RadioButton>

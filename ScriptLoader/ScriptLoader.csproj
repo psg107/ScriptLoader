@@ -217,6 +217,16 @@
     </ApplicationDefinition>
     <Compile Include="Helpers\NavigationService.cs" />
     <Compile Include="Helpers\WindowHelper.cs" />
+    <Compile Include="Migrations\20210414173718_AddEditorSetting.cs" />
+    <Compile Include="Migrations\20210414173718_AddEditorSetting.designer.cs">
+      <DependentUpon>20210414173718_AddEditorSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20210414173905_SetEditorDefaultValue.cs" />
+    <Compile Include="Migrations\20210414173905_SetEditorDefaultValue.designer.cs">
+      <DependentUpon>20210414173905_SetEditorDefaultValue.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ValueConverters\EnumToRadioValueConverter.cs" />
+    <Compile Include="ViewModels\SettingWindowViewModel.cs" />
     <Compile Include="Views\SettingWindow.xaml.cs">
       <DependentUpon>SettingWindow.xaml</DependentUpon>
     </Compile>
