@@ -4,6 +4,7 @@ using Prism.Commands;
 using Prism.Mvvm;
 using ScriptLoader.Helpers;
 using ScriptLoader.Repositories;
+using ScriptLoader.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -58,6 +59,15 @@ namespace ScriptLoader.ViewModels
         }
 
         /// <summary>
+        /// 하단에 표시할 상태메시지
+        /// </summary>
+        public string BottomStatusMessage
+        {
+            get => bottomStatusMessage;
+            set => SetProperty(ref bottomStatusMessage, value);
+        }
+
+        /// <summary>
         /// 작동중
         /// </summary>
         public bool Running
@@ -68,6 +78,7 @@ namespace ScriptLoader.ViewModels
 
         private string scriptDirectory;
         private ObservableCollection<string> scripts;
+        private string bottomStatusMessage;
         private string activatedScript;
         private bool running;
 
@@ -81,13 +92,19 @@ namespace ScriptLoader.ViewModels
         private MessageBoxHelper messageBoxHelper;
 
         /// <summary>
+        /// 네비게이션
+        /// </summary>
+        private NavigationService navigationService;
+
+        /// <summary>
         /// 내부 설정
         /// </summary>
         private SettingRepository settingRepository;
 
-        private void Initialize()
+        private void InitializeServices()
         {
             this.messageBoxHelper = new MessageBoxHelper(this);
+            this.navigationService = new NavigationService(this);
             this.settingRepository = new SettingRepository();
         }
 
@@ -104,7 +121,9 @@ namespace ScriptLoader.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    Initialize();
+                    InitializeServices();
+
+                    this.BottomStatusMessage = "대기 중..";
 
                     var setting = this.settingRepository.GetSetting();
                     this.ScriptDirectory = setting.ScriptDirectory;
@@ -236,13 +255,15 @@ namespace ScriptLoader.ViewModels
                     }.BuildNotifier();
                     notifier.ShowInformation($"{this.ActivatedScriptFileName} 로드!");
 
+                    this.BottomStatusMessage = $"실행 중 스크립트 : {this.ActivatedScriptFileName}";
+
                     this.Running = true;
                 });
             }
         }
 
         /// <summary>
-        /// 
+        /// 프로그램 재실행
         /// </summary>
         public DelegateCommand ReloadCommand
         {
@@ -273,6 +294,34 @@ namespace ScriptLoader.ViewModels
                     {
                         Process.Start("notepad.exe", scriptFilePath);
                     }
+                });
+            }
+        }
+
+        /// <summary>
+        /// 설정창 열기
+        /// </summary>
+        public DelegateCommand OpenSettingWindowCommand
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    navigationService.OpenDialogWindow<SettingWindow>();
+                });
+            }
+        }
+
+        /// <summary>
+        /// 스크립트 추가 창 열기
+        /// </summary>
+        public DelegateCommand AddScriptWindowCommand
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    messageBoxHelper.ShowMessage("지원 예정..");
                 });
             }
         }

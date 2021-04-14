@@ -15,38 +15,14 @@ namespace ScriptLoader.Helpers
 
         public void ShowMessage(string message)
         {
-            Window owner = null;
-
-            if (dataContext != null)
-            {
-                foreach (Window win in App.Current.Windows)
-                {
-                    if (win.DataContext == dataContext)
-                    {
-                        owner = win;
-                        break;
-                    }
-                }
-            }
+            var owner = WindowHelper.GetWindowFromBindableObject(this.dataContext);
 
             MessageBox.Show(owner, message, CAPTION);
         }
 
         public bool ShowQuestionMessage(string message)
         {
-            Window owner = null;
-
-            if (dataContext != null)
-            {
-                foreach (Window win in App.Current.Windows)
-                {
-                    if (win.DataContext == dataContext)
-                    {
-                        owner = win;
-                        break;
-                    }
-                }
-            }
+            var owner = WindowHelper.GetWindowFromBindableObject(this.dataContext);
 
             var result = MessageBox.Show(owner, message, CAPTION, MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)

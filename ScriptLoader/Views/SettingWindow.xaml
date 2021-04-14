@@ -1,0 +1,51 @@
+﻿<mah:MetroWindow x:Class="ScriptLoader.Views.SettingWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 xmlns:local="clr-namespace:ScriptLoader.Views"
+                 mc:Ignorable="d"
+                 WindowStartupLocation="CenterOwner"
+                 Title="Setting"
+                 ShowMaxRestoreButton="False"
+                 ShowMinButton="False"
+                 ShowInTaskbar="False"
+                 ResizeMode="NoResize"
+                 Width="500"
+                 Height="300">
+    
+    <StackPanel Margin="10">
+        <TextBlock Text="* 모든 설정은 자동으로 저장됩니다." Foreground="Red" />
+        
+        <!--편집기-->
+        <GroupBox Header="스크립트 편집기" Margin="0,5,0,0" Style="{x:Null}" Padding="5,10">
+            <GroupBox.Content>
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton Content="메모장" />
+                    <RadioButton Content="VSCode" Margin="20,0,0,0" />
+                    <RadioButton Margin="20,0,0,0" FocusVisualStyle="{x:Null}">
+                        <RadioButton.Content>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" Text="직접입력" VerticalAlignment="Center" />
+                                <TextBox Grid.Column="1" Margin="5,0,0,0" Width="200" IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type RadioButton}}, Path=IsChecked}" />
+                            </Grid>
+                        </RadioButton.Content>
+                    </RadioButton>
+                </StackPanel>
+            </GroupBox.Content>
+        </GroupBox>
+
+        <!--뭔가..-->
+        <GroupBox Header="기타 설정" Margin="0,5,0,0" Style="{x:Null}" Padding="5,10">
+            <TextBlock Text="각종 기타 설정.." />
+        </GroupBox>
+
+    </StackPanel>
+    
+</mah:MetroWindow>
