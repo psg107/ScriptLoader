@@ -167,7 +167,7 @@ namespace ScriptLoader.ViewModels
                         {
                             TopMost = false,
                             LifeTime = 5,
-                            Width = 600
+                            Width = 500
                         }.BuildNotifier();
                         notifier.ShowInformation($"" +
                             $"스크립트 경로가 설정되었습니다.\n" +
@@ -195,7 +195,7 @@ namespace ScriptLoader.ViewModels
                     {
                         TopMost = false,
                         LifeTime = 5,
-                        Width = 600
+                        Width = 500
                     }.BuildNotifier();
 
                     if (string.IsNullOrEmpty(this.ScriptDirectory))
