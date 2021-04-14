@@ -215,6 +215,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AttachedProperties\CloseWindowWithESCButtonAttachedProperty.cs" />
     <Compile Include="Helpers\NavigationService.cs" />
     <Compile Include="Helpers\WindowHelper.cs" />
     <Compile Include="Migrations\20210414173718_AddEditorSetting.cs" />
