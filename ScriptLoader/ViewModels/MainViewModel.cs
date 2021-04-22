@@ -10,6 +10,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using ToastNotifications.Messages;
@@ -213,8 +214,8 @@ namespace ScriptLoader.ViewModels
                         return;
                     }
 
-                    var scripts = Directory.GetFiles(this.ScriptDirectory, "*.ahk");
-                    if (scripts.Length != 0)
+                    var scripts = Directory.GetFiles(this.ScriptDirectory, "*.ahk").Where(x => Path.GetFileName(x).StartsWith("_") == false).ToList();
+                    if (scripts.Count != 0)
                     {
                         this.Scripts = new ObservableCollection<string>(scripts);
                     }
