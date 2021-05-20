@@ -76,7 +76,35 @@
 
                 <!--리스트-->
                 <Grid Grid.Row="1" Margin="0,2,0,0">
-                    <cc:NoRightButtonListBox ItemsSource="{Binding Scripts}" SelectedItem="{Binding ActivatedScript}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!--검색-->
+                    <TextBox x:Name="SearchTextBox" Grid.Row="0" Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <cmd:EventToCommand Command="{Binding SearchCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                    <TextBlock Text="검색.." IsHitTestVisible="False" VerticalAlignment="Center" Margin="8,0" HorizontalAlignment="Left">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Visibility" Value="Hidden"/>
+                                <Setter Property="Foreground" Value="Gray"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=SearchTextBox}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+
+                    <!--리스트-->
+                    <cc:NoRightButtonListBox Grid.Row="1" ItemsSource="{Binding Scripts}" SelectedItem="{Binding ActivatedScript}">
                         <cc:NoRightButtonListBox.Resources>
                             <Style TargetType="{x:Type cc:NoRightButtonListBox}" BasedOn="{StaticResource MahApps.Styles.ListBox}" />
                             <Style TargetType="{x:Type cc:ListBoxItemNoRightClickSelect}" BasedOn="{StaticResource MahApps.Styles.ListBoxItem}">

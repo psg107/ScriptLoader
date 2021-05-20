@@ -7,6 +7,7 @@ using ScriptLoader.Helpers;
 using ScriptLoader.Repositories;
 using ScriptLoader.Views;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -31,7 +32,12 @@ namespace ScriptLoader.ViewModels
         }
 
         /// <summary>
-        /// 불러온 스크립트
+        /// 불러온 원본 스크립트
+        /// </summary>
+        public IEnumerable<string> OriginScripts { get; set; }
+
+        /// <summary>
+        /// SearchString으로 필터링된 스크립트
         /// </summary>
         public ObservableCollection<string> Scripts
         {
@@ -78,11 +84,21 @@ namespace ScriptLoader.ViewModels
             set => SetProperty(ref running, value);
         }
 
+        /// <summary>
+        /// 검색어
+        /// </summary>
+        public string SearchString
+        {
+            get => searchString;
+            set => SetProperty(ref searchString, value);
+        }
+
         private string scriptDirectory;
         private ObservableCollection<string> scripts;
         private string bottomStatusMessage;
         private string activatedScript;
         private bool running;
+        private string searchString;
 
         #endregion
 
@@ -214,9 +230,11 @@ namespace ScriptLoader.ViewModels
                         return;
                     }
 
-                    var scripts = Directory.GetFiles(this.ScriptDirectory, "*.ahk").Where(x => Path.GetFileName(x).StartsWith("_") == false).ToList();
-                    if (scripts.Count != 0)
+                    this.SearchString = string.Empty;
+                    var scripts = Directory.GetFiles(this.ScriptDirectory, "*.ahk").Where(x => Path.GetFileName(x).StartsWith("_") == false);
+                    if (scripts.Count() != 0)
                     {
+                        this.OriginScripts = scripts;
                         this.Scripts = new ObservableCollection<string>(scripts);
                     }
                 });
@@ -346,6 +364,21 @@ namespace ScriptLoader.ViewModels
                 return new DelegateCommand(() =>
                 {
                     messageBoxHelper.ShowMessage("지원 예정..");
+                });
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public DelegateCommand SearchCommand
+        {
+            get
+            {
+                return new DelegateCommand(() =>
+                {
+                    var filteredScripts = this.OriginScripts.Where(x => x.Contains(this.SearchString));
+                    this.Scripts = new ObservableCollection<string>(filteredScripts);
                 });
             }
         }
