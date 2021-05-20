@@ -13,5 +13,12 @@ namespace ScriptLoader
         {
             InitializeComponent();
         }
+
+        protected override void OnInitialized(EventArgs e)
+        {
+            base.OnInitialized(e);
+
+            SearchTextBox.Focus();
+        }
     }
 }
