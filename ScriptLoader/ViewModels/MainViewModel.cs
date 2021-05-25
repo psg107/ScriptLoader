@@ -377,7 +377,7 @@ namespace ScriptLoader.ViewModels
             {
                 return new DelegateCommand(() =>
                 {
-                    var filteredScripts = this.OriginScripts.Where(x => x.ToLower().Contains(this.SearchString.ToLower()));
+                    var filteredScripts = this.OriginScripts.Where(x => Path.GetFileName(x).ToLower().Contains(this.SearchString.ToLower()));
                     this.Scripts = new ObservableCollection<string>(filteredScripts);
                 });
             }
